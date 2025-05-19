@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lottie-react": "^2.4.1",
     "preact": "^10.26.5"
   },
   "devDependencies": {

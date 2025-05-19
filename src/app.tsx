@@ -1,13 +1,13 @@
-import Lottie, { type LottieRefCurrentProps } from 'lottie-react'
-import watchAnim from './watch.json'
-import { useEffect, useRef } from 'preact/hooks'
-import styles from './styles.module.css'
+import { render } from 'preact'
+import './styles/index.css'
+import { useEffect } from 'preact/hooks'
+import styles from './styles/styles.module.css'
 import useBeep from './hooks/useBeep'
 import useTimer from './hooks/useTimer'
+import Zham from './components/zham'
 
 const App = () => {
-  const lottieRef = useRef<LottieRefCurrentProps | null>(null)
-  const { play, pause, update, isRunning, duration, secondsLeft, flooredSeconds } = useTimer(300)
+  const { play, pause, update, isRunning, duration, secondsLeft, flooredSeconds, setSecondsLeft } = useTimer(300)
   const getTime = () =>
     `${Math.floor(flooredSeconds / 60)
       .toString()
@@ -34,16 +34,23 @@ const App = () => {
     if (secondsLeft === 0) finishBeep.play()
   }, [secondsLeft])
 
+  const addSeconds = (s: number) => setSecondsLeft(prev => Math.min(duration, Math.max(0, prev + s)))
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       finishBeep.stop()
-      if (e.key >= '1' && e.key <= '9') {
-        const mins = Number(e.key)
+      if (e.code.startsWith('Digit') && e.code !== 'Digit0') {
+        e.preventDefault()
+        const mins = Number(e.code.replace('Digit', ''))
         update(mins * 60)
-      } else if (e.key === ' ') {
+      } else if (e.code === 'Digit0') update(600)
+      else if (e.code === 'Minus') update(660)
+      else if (e.code === 'Equal') update(720)
+      else if (e.code === 'Space') {
         e.preventDefault()
         isRunning ? pause() : play()
-      }
+      } else if (e.code === 'ArrowLeft') addSeconds(5)
+      else if (e.code === 'ArrowRight') addSeconds(-5)
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -53,18 +60,14 @@ const App = () => {
     }
   })
 
-  useEffect(() => {
-    lottieRef.current?.goToAndStop(600 - Math.min((secondsLeft / duration) * 600, 600), true)
-  }, [secondsLeft])
-
   return (
     <div className={`${styles.main}  ${secondsLeft < 60 ? styles.minLeft : ''}`}>
       <div className={`${styles.anim}`}>
-        <Lottie animationData={watchAnim} loop={false} autoplay={false} lottieRef={lottieRef} className={styles.lottie} />
+        <Zham secondsLeft={secondsLeft} duration={duration} />
       </div>
       <span className={`${styles.time}  ${secondsLeft < 10 ? styles.flash : ''}`}>{getTime()}</span>
     </div>
   )
 }
 
-export default App
+render(<App />, document.body)

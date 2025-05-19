@@ -2,7 +2,6 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Noto Sans Armenian', sans-serif;
   background-color: #000;
   color: white;
   height: 100%;
@@ -15,13 +14,6 @@ body {
 
 * {
   box-sizing: border-box;
-}
-
-@font-face {
-  font-family: 'Noto Sans Armenian';
-  src: url('/NotoSansArmenian-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
 }
 
 @font-face {

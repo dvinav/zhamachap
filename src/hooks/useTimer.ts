@@ -44,24 +44,11 @@ const useTimer = (initialDuration = 0) => {
 
   const pause = () => setIsRunning(false)
 
-  const addSeconds = (s: number) => {
-    setSecondsLeft(prev => Math.min(duration, Math.max(0, prev + s)))
-  }
-
   useEffect(() => {
     setSecondsLeft(prev => Math.min(duration, prev))
   }, [duration])
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') addSeconds(5)
-      if (e.key === 'ArrowRight') addSeconds(-5)
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [])
-
-  return { duration, secondsLeft, play, pause, isRunning, update, flooredSeconds }
+  return { duration, secondsLeft, play, pause, isRunning, update, flooredSeconds, setSecondsLeft }
 }
 
 export default useTimer
