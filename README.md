@@ -2,6 +2,8 @@
 
 A minimal beeping timer built with Preact. Try it at [zhamachap.pages.dev](https://zhamachap.pages.dev)
 
+> **Note**: This app requires a physical keyboard and is too small on mobile devices.
+
 ## Usage
 
 Use keyboard controls to operate the timer:
